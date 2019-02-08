@@ -8,5 +8,6 @@ from . import (
     opencorpora,
     ruscorpora,
     ud,
-    dialog2017
+    dialog2017,
+    mystem
 )
