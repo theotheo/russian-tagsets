@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Conversion between inner OpenCorpora format and Universal Dependencies 1.4
+Conversion between inner Mystem format and Universal Dependencies
 (http://universaldependencies.org/ru/pos/all.html)
+https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/
 
 Known issues:
 TODO
@@ -44,8 +45,8 @@ class Tag14(object):
             'неод': 'Inan',
         },
         'Aspect': {
-            'impf': 'Imp',
-            'perf': 'Perf',
+            'несов': 'Imp',
+            'сов': 'Perf',
         },
         'Case': { # 
             'твор': 'Ins',
@@ -100,7 +101,7 @@ class Tag14(object):
         ,
         'VerbForm': {
             'инф': 'Inf',
-            'деепр': 'Part',
+            'деепр': 'Grnd',
             'прич': 'Part',
         },
         'Voice': { #
@@ -127,8 +128,8 @@ class Tag14(object):
 
             if gram in ('имя', 'фам', 'гео', 'отч'):
                 self.pos = 'PROPN'
-            elif gram == 'сокр':
-                self.pos = 'NOUN' # ?? PROPN?
+            # elif gram == 'сокр':
+            #     self.pos = 'NOUN' # ?? PROPN?
 
     def _fill_one_gram_oc(self, gram):
         match = False
@@ -163,8 +164,8 @@ class Tag20(Tag14):
     # http://universaldependencies.org/v2/postags.html
     GRAM_MAP['_POS']['CONJ'] = 'CCONJ'
     # http://universaldependencies.org/v2/features.html
-    GRAM_MAP['VerbForm']['GRND'] = 'Conv'
-    GRAM_MAP['Abbr'] = {'Abbr': 'Yes'}
+    GRAM_MAP['VerbForm']['деепр'] = 'Conv'
+    GRAM_MAP['Abbr'] = {'сокр': 'Yes'}
 
 
 def to_ud14(oc_tag, word=None):
