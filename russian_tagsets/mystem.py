@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Conversion between inner Mystem format and Universal Dependencies
-(http://universaldependencies.org/ru/pos/all.html)
+
+http://universaldependencies.org/ru/pos/all.html
 https://tech.yandex.ru/mystem/doc/grammemes-values-docpage/
 
 Known issues:
@@ -40,7 +41,7 @@ class Tag14(object):
             # 'PRTS': 'VERB',
             # 'VERB': 'VERB',
         },
-        'Animacy': { # 
+        'Animacy': { 
             'од': 'Anim',
             'неод': 'Inan',
         },
@@ -48,7 +49,7 @@ class Tag14(object):
             'несов': 'Imp',
             'сов': 'Perf',
         },
-        'Case': { # 
+        'Case': { 
             'твор': 'Ins',
             'вин': 'Acc',
             'дат': 'Dat',
@@ -60,39 +61,39 @@ class Tag14(object):
             'им': 'Nom',
             'зват': 'Nom',
         },
-        'Degree': { # 
+        'Degree': { 
             'срав': 'Cmp',
             'прев': 'Sup',
         },
-        'Gender': { #
+        'Gender': { 
             'жен': 'Fem',
             'муж': 'Masc',
             'сред': 'Neut',
         },
-        'Mood': { # ??
+        'Mood': {
             'пов': 'Imp',
             'изъяв': 'Ind'
         },
-        'Number': { # 
+        'Number': {  
             'мн': 'Plur',
             'ед': 'Sing',
         },
         'NumForm': {
             'NUMB': 'Digit',
         },
-        'Person': { # 
+        'Person': { 
             '1-л': '1',
             '2-л': '2',
             '3-л': '3',
         },
-        'Tense': { # 
+        'Tense': { 
             'непрош': 'Fut',
             'прош': 'Past',
             'наст': 'Pres',
         },
         'Variant': {
-            'ADJS': 'Brev',
-            'PRTS': 'Brev',
+            'кр': 'Brev',
+            # 'полн': 'Brev',
         },
         'Subcat': {
             'нп': 'Intr',
@@ -104,7 +105,7 @@ class Tag14(object):
             'деепр': 'Grnd',
             'прич': 'Part',
         },
-        'Voice': { #
+        'Voice': { 
             'действ': 'Act',
             'страд': 'Pass',
         },
@@ -116,11 +117,11 @@ class Tag14(object):
         }
     }
 
-    def __init__(self, oc_tag):
+    def __init__(self, tags):
         self.pos = 'X'
         self.grammemes = dict()
         self.unmatched = set()
-        self._fill_from_oc(oc_tag)
+        self._fill_from_mystem(tags)
 
     def _postprocess(self):
         while len(self.unmatched) > 0:
@@ -131,7 +132,7 @@ class Tag14(object):
             # elif gram == 'сокр':
             #     self.pos = 'NOUN' # ?? PROPN?
 
-    def _fill_one_gram_oc(self, gram):
+    def _fill_one_gram_mystem(self, gram):
         match = False
         for categ, gmap in sorted(self.GRAM_MAP.items()):
             if gram in gmap:
@@ -145,12 +146,12 @@ class Tag14(object):
         if not match:
             self.unmatched.add(gram)
 
-    def _fill_from_oc(self, oc_tag):
-        grams = re.split('\W', oc_tag)
-        # print(oc_tag, grams)
-        # grams = oc_tag.replace(' ', ',').split(',')
+    def _fill_from_mystem(self, tags):
+        tags = tags.split('|')[0] # just choose first option
+        grams = re.split('\W', tags)
+
         for g in grams:
-            self._fill_one_gram_oc(g)
+            self._fill_one_gram_mystem(g)
         self._postprocess()
 
     def __str__(self):
@@ -168,13 +169,13 @@ class Tag20(Tag14):
     GRAM_MAP['Abbr'] = {'сокр': 'Yes'}
 
 
-def to_ud14(oc_tag, word=None):
-    tag = Tag14(oc_tag)
+def to_ud14(tag, word=None):
+    tag = Tag14(tag)
     return str(tag)
 
 
-def to_ud20(oc_tag, word=None):
-    tag = Tag20(oc_tag)
+def to_ud20(tag, word=None):
+    tag = Tag20(tag)
     return str(tag)
 
 converters.add('mystem', 'ud14', to_ud14)
