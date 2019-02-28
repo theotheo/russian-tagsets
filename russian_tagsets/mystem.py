@@ -21,7 +21,7 @@ class Tag14(object):
             'A': 'ADJ', # прилагательное
             # 'ADJS': 'ADJ',
             'ADV': 'ADV', # наречие
-            'APRO': 'DET', #?? местоимение-прилагательное
+            'APRO': 'ADJ', #?? местоимение-прилагательное https://universaldependencies.org/ru/pos/ADJ.html
             'ADVPRO': 'DET', #?? местоименное наречие
             'CONJ': 'CONJ', #  союз
             'V': 'VERB', # глагол,
